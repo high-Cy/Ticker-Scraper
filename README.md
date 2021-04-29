@@ -1,1 +1,1 @@
-# Ticker_Scraper
+# Ticker_Scrapper
