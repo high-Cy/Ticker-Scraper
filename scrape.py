@@ -72,11 +72,13 @@ class Scrapper:
         textobject = canvas.beginText()
         textobject.setTextOrigin(10, 800)
         textobject.setFont('Times-Roman', 12)
-        textobject.textLine(text=f'Date: {today}\n)'
-                            f'Top {i} mentioned stocks in r/{self.sub}, '
-                            f'scrapped from {self.lim} posts sorting by {self.sort}\n'
-                            f'Format with Ticker : Number\n'
-                            f'Process Time: {time_taken:.2f} minutes\n')
+        textobject.textLine(text=f'Date: {today})')
+        textobject.textLine(text=f'Top {i} mentioned stocks in r/{self.sub}')
+        textobject.textLine(text=f'scrapped from {self.lim} posts sorting by {self.sort}')
+        textobject.textLine(text=f'Format with Ticker : Number')
+        textobject.textLine(text=f'Process Time: {time_taken:.2f} minutes')
+
+
 
         for key, value in stocks.items():
             textobject.textLine(text=f'{key} : {value}')
