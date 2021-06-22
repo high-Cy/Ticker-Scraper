@@ -2,7 +2,11 @@ import praw
 import csv
 import re
 import time
+from datetime import date
 from fpdf import FPDF
+from reportlab.pdfgen.canvas import Canvas
+from reportlab.lib.pagesizes import A4
+
 
 reddit = praw.Reddit()
 
@@ -55,21 +59,33 @@ class Scrapper:
 
     @staticmethod
     def find_ticker(stocks, ticker, text):
-        if re.search(r'\s+\$?' + ticker + r'\$?\s+', str(text)):
+        if re.search(r'\s+\$?' + ticker + r'\$?\s+', str(text).upper()):
             stocks[ticker] += 1
 
     @staticmethod
     def save_tickers(stocks):
-        dict(sorted(stocks.items(), key=lambda item: item[1], reverse=True)[:10])
+        stocks = dict(sorted(stocks.items(), key=lambda item: item[1], reverse=True)[:10])
+        today = date.today()
+
+        canvas = Canvas('top10.pdf', pagesize=A4)
+        textobject = canvas.beginText()
+        textobject.setTextOrigin(10, 730)
+        textobject.setFont('Times-Roman', 12)
+        textobject.textLine(text=str(today))
+
         pdf = FPDF()
         pdf.add_page()
         pdf.set_font('Arial', size=18)
+        pdf.cell(200, 10, txt=str(today), ln=1, align='L')
 
-        for key, value in stocks:
+        for key, value in stocks.items():
             pdf.cell(200, 10, txt=f'{key} : {value}', ln=1, align='L')
+            textobject.textLine(text=f'{key} : {value}')
 
-        pdf.output('top10_tickers.pdf')
+        canvas.drawText(textobject)
+        canvas.save()
+        # pdf.output('top10_tickers.pdf')
 
 
 if __name__ == '__main__':
-    Scrapper('wallstreetbets', sort='hot', lim=100).get_tickers()
+    Scrapper('wallstreetbets', sort='hot', lim=10).get_tickers()
