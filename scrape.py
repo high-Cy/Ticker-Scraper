@@ -6,7 +6,6 @@ from datetime import date
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.lib.pagesizes import A4
 
-
 reddit = praw.Reddit()
 
 
@@ -58,13 +57,14 @@ class Scrapper:
 
     @staticmethod
     def find_ticker(stocks, ticker, text):
+        # ticker may begin or end with $ symbol
         if re.search(r'\s+\$?' + ticker + r'\$?\s+', str(text).upper()):
             stocks[ticker] += 1
 
-    @staticmethod
-    def save_tickers(stocks, time_taken):
+    def save_tickers(self, stocks, time_taken):
         # sort in descending order
-        stocks = dict(sorted(stocks.items(), key=lambda item: item[1], reverse=True)[:10])
+        i = 10  # number to tickers to display
+        stocks = dict(sorted(stocks.items(), key=lambda item: item[1], reverse=True)[:i])
         today = date.today()
 
         # write to pdf and save
@@ -72,7 +72,11 @@ class Scrapper:
         textobject = canvas.beginText()
         textobject.setTextOrigin(10, 800)
         textobject.setFont('Times-Roman', 12)
-        textobject.textLine(text=f'Date: {today} ; Process Time: {time_taken:.2f} minutes')
+        textobject.textLine(text=f'Date: {today}\n)'
+                            f'Top {i} mentioned stocks in r/{self.sub}, '
+                            f'scrapped from {self.lim} posts sorting by {self.sort}\n'
+                            f'Format with Ticker : Number\n'
+                            f'Process Time: {time_taken:.2f} minutes\n')
 
         for key, value in stocks.items():
             textobject.textLine(text=f'{key} : {value}')
