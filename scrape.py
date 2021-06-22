@@ -68,7 +68,7 @@ class Scrapper:
         today = date.today()
 
         # write to pdf and save
-        canvas = Canvas('top10.pdf', pagesize=A4)
+        canvas = Canvas('top_mentioned.pdf', pagesize=A4)
         textobject = canvas.beginText()
         textobject.setTextOrigin(10, 800)
         textobject.setFont('Times-Roman', 12)
