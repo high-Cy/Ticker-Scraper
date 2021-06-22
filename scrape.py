@@ -1,6 +1,7 @@
 import praw
 import csv
 import re
+import time
 
 reddit = praw.Reddit()
 
@@ -35,6 +36,7 @@ class Scrapper:
 
         print(f'Loading information from r/{self.sub}')
 
+        start_time = time.time()
         for submission in subreddit:
             if submission.link_flair_text != 'Meme':
                 for ticker in stocks.keys():
@@ -43,10 +45,12 @@ class Scrapper:
                     submission.comments.replace_more(limit=0)
                     for comment in submission.comments.list():
                         self.find_ticker(stocks, ticker, comment)
-
+        end_time = time.time()
         print('Done!')
+        print(f'Time taken: {end_time - start_time}')
 
         dict(sorted(stocks.items(), key=lambda item: item[1]))
+
 
     @staticmethod
     def find_ticker(stocks, ticker, text):
