@@ -50,11 +50,11 @@ class Scrapper:
                     for comment in submission.comments.list():
                         self.find_ticker(stocks, ticker, comment)
 
-        end_time = time.time()
+        time_taken = (time.time() - start_time)/60.0
         print('Done!')
-        print(f'Time taken: {(end_time - start_time)/60.0 :.2f} minutes')
+        print(f'Time taken: {time_taken:.2f} minutes')
 
-        self.save_tickers(stocks)
+        self.save_tickers(stocks, time_taken)
 
     @staticmethod
     def find_ticker(stocks, ticker, text):
@@ -62,15 +62,15 @@ class Scrapper:
             stocks[ticker] += 1
 
     @staticmethod
-    def save_tickers(stocks):
-        stocks = dict(sorted(stocks.items(), key=lambda item: item[1], reverse=True)[:10])
+    def save_tickers(stocks, time_taken):
+        stocks = dict(sorted(stocks.items(), key=lambda item: item[1], reverse=True)[:20])
         today = date.today()
 
         canvas = Canvas('top10.pdf', pagesize=A4)
         textobject = canvas.beginText()
-        textobject.setTextOrigin(10, 730)
+        textobject.setTextOrigin(10, 50)
         textobject.setFont('Times-Roman', 12)
-        textobject.textLine(text=str(today))
+        textobject.textLine(text=f'{today}  Process Time: {time_taken}')
 
         for key, value in stocks.items():
             textobject.textLine(text=f'{key} : {value}')
