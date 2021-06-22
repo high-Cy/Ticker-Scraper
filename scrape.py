@@ -31,7 +31,7 @@ class Scrapper:
     def get_tickers(self):
 
         stocks = {}
-        with open('stock_tickers.csv', mode='r') as f:
+        with open('stock_ticker.csv', mode='r') as f:
             reader = csv.reader(f)
             for row in reader:
                 stocks[row[0]] = 0
@@ -63,14 +63,14 @@ class Scrapper:
 
     @staticmethod
     def save_tickers(stocks, time_taken):
-        stocks = dict(sorted(stocks.items(), key=lambda item: item[1], reverse=True)[:20])
+        stocks = dict(sorted(stocks.items(), key=lambda item: item[1], reverse=True)[:50])
         today = date.today()
 
         canvas = Canvas('top10.pdf', pagesize=A4)
         textobject = canvas.beginText()
-        textobject.setTextOrigin(10, 50)
+        textobject.setTextOrigin(10, 800)
         textobject.setFont('Times-Roman', 12)
-        textobject.textLine(text=f'{today}  Process Time: {time_taken}')
+        textobject.textLine(text=f'Date: {today} ; Process Time: {time_taken:.2f} minutes')
 
         for key, value in stocks.items():
             textobject.textLine(text=f'{key} : {value}')
@@ -80,4 +80,4 @@ class Scrapper:
 
 
 if __name__ == '__main__':
-    Scrapper('wallstreetbets', sort='hot', lim=10).get_tickers()
+    Scrapper('wallstreetbets', sort='hot', lim=1000).get_tickers()
