@@ -29,7 +29,6 @@ class Scrapper:
             return reddit.subreddit(self.sub).hot(limit=self.lim)
 
     def get_tickers(self):
-
         stocks = {}
         with open('stock_ticker.csv', mode='r') as f:
             reader = csv.reader(f)
@@ -41,6 +40,7 @@ class Scrapper:
         print(f'Loading information from r/{self.sub}')
 
         start_time = time.time()
+        # goes through all posts and comments looking for tickers
         for submission in subreddit:
             if submission.link_flair_text != 'Meme':
                 for ticker in stocks.keys():
@@ -63,9 +63,11 @@ class Scrapper:
 
     @staticmethod
     def save_tickers(stocks, time_taken):
-        stocks = dict(sorted(stocks.items(), key=lambda item: item[1], reverse=True)[:50])
+        # sort in descending order
+        stocks = dict(sorted(stocks.items(), key=lambda item: item[1], reverse=True)[:10])
         today = date.today()
 
+        # write to pdf and save
         canvas = Canvas('top10.pdf', pagesize=A4)
         textobject = canvas.beginText()
         textobject.setTextOrigin(10, 800)
