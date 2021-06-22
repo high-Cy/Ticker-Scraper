@@ -5,3 +5,4 @@ Ticker list from NYSE and NASDAQ
 
 Common words such as FIVE, ARE, OR, etc etc are removed to *reduce* false positives
 
+False positives are still present
