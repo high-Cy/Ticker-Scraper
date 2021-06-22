@@ -2,6 +2,7 @@ import praw
 import csv
 import re
 import time
+from fpdf import FPDF
 
 reddit = praw.Reddit()
 
@@ -45,18 +46,29 @@ class Scrapper:
                     submission.comments.replace_more(limit=0)
                     for comment in submission.comments.list():
                         self.find_ticker(stocks, ticker, comment)
+
         end_time = time.time()
         print('Done!')
         print(f'Time taken: {end_time - start_time}')
 
-        dict(sorted(stocks.items(), key=lambda item: item[1]))
-
+        self.save_tickers(stocks)
 
     @staticmethod
     def find_ticker(stocks, ticker, text):
         if re.search(r'\s+\$?' + ticker + r'\$?\s+', str(text)):
             stocks[ticker] += 1
 
+    @staticmethod
+    def save_tickers(stocks):
+        dict(sorted(stocks.items(), key=lambda item: item[1], reverse=True)[:10])
+        pdf = FPDF()
+        pdf.add_page()
+        pdf.set_font('Arial', size=18)
+
+        for key, value in stocks:
+            pdf.cell(200, 10, txt=f'{key} : {value}', ln=1, allign='L')
+
+        pdf.output('top10_tickers.pdf')
 
 if __name__ == '__main__':
     Scrapper('wallstreetbets', sort='hot', lim=100).get_tickers()
