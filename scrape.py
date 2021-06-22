@@ -49,7 +49,7 @@ class Scrapper:
 
         end_time = time.time()
         print('Done!')
-        print(f'Time taken: {end_time - start_time}')
+        print(f'Time taken: {(end_time - start_time)/60.0 :.2f} minutes')
 
         self.save_tickers(stocks)
 
@@ -66,9 +66,10 @@ class Scrapper:
         pdf.set_font('Arial', size=18)
 
         for key, value in stocks:
-            pdf.cell(200, 10, txt=f'{key} : {value}', ln=1, allign='L')
+            pdf.cell(200, 10, txt=f'{key} : {value}', ln=1, align='L')
 
         pdf.output('top10_tickers.pdf')
+
 
 if __name__ == '__main__':
     Scrapper('wallstreetbets', sort='hot', lim=100).get_tickers()
