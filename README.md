@@ -1,5 +1,5 @@
 # Ticker-Scraper
-Goes through reddit's r/wallstreetbets and counts number of time a stock is mentioned
+Goes through reddit's r/wallstreetbets,counts number of time a stock is mentioned, and outputs as a pdf
 
 Ticker list from NYSE and NASDAQ
 
