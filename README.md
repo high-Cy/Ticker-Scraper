@@ -1,4 +1,4 @@
-# Ticker_Scrapper
+# Ticker-Scraper
 Goes through reddit's r/wallstreetbets and counts number of time a stock is mentioned
 
 Ticker list from NYSE and NASDAQ
